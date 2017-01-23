@@ -102,4 +102,3 @@ class BMAdb(object):
             cursor.close()
             conn.close()
 
-    def insert_log(self, )
