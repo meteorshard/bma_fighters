@@ -33,7 +33,7 @@ class BMAdb(object):
                 u_id: 用户id
                 name: 名字
                 wechat_id: 微信id
-                sex: 性别
+                sex: 性别 0-female 1-male
                 tel: 电话
                 paper_type: 证件类型
                 paper_number: 证件号码
@@ -90,6 +90,7 @@ class BMAdb(object):
                         'PRIMARY KEY(u_id)'
                     ')'
                 )
+                cursor.execute(sql)
 
                 conn.commit()
 
@@ -101,3 +102,4 @@ class BMAdb(object):
             cursor.close()
             conn.close()
 
+    def insert_log(self, )
