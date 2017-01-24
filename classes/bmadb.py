@@ -79,7 +79,7 @@ class BMAdb(object):
                     'CREATE TABLE IF NOT EXISTS %s('
                         'u_id int NOT NULL AUTO_INCREMENT,'
                         'name varchar(30) NOT NULL,'
-                        'wechat_id varchar(30) NOT NULL,'
+                        'wechat_id varchar(30),'
                         'sex tinyint(1) NOT NULL,'
                         'tel varchar(13),'
                         'paper_type varchar(10),'
@@ -107,8 +107,20 @@ class BMAdb(object):
     def insert_log(self, dict_log):
         placeholders = ", ".join(['%s']*len(dict_log))
         columns = ', '.join(dict_log.keys())
+
+        # INSERT INTO pay_log (l_id, u_id, ...) VALUES (%s, %s, ...)
         sql = ('INSERT INTO %s (%s) VALUES (%s)'
                 %(self.TABLE_PAY_LOG,
                 columns,
                 placeholders))
-
+        try:
+            conn = MySQLdb.connect(**self.DB_INFO)
+            cursor = conn.cursor()
+            cursor.execute(sql, dict_log.values())
+        except MySQLdb.Error, e:
+            # 如果出错就输出错误消息
+            print('MySQL Error [%d]: %s' %(e.args[0], e.args[1]))
+        finally:
+            cursor.close()
+            conn.close()
+ 
