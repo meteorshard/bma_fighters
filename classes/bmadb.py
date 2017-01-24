@@ -54,8 +54,8 @@ class BMAdb(object):
                 cursor = conn.cursor()
 
                 # 如果没有数据库就新建一个
-                sql = 'CREATE DATABASE IF NOT EXISTS %s' %self.DB_NAME
-                cursor.execute(sql)
+                sql = 'CREATE DATABASE IF NOT EXISTS %s'
+                cursor.execute(sql, (self.DB_NAME,))
                 conn.select_db(self.DB_NAME)
 
                 # 如果没有pay_log表就新建一个
@@ -105,6 +105,15 @@ class BMAdb(object):
             conn.close()
 
     def insert_dict(self, table_name, dict_to_insert):
+        """ 向数据库插入字典格式的数据
+        根据字典格式数据生成对应的SQL
+        需注意保持格式一致
+
+        Args:
+            table_name: 目标数据表名
+            dict_to_insert: 需要插入的字典格式数据
+        """
+
         # 插入的dict里有几项就生成几个“%s, ”
         placeholders = ', '.join(['%s']*len(dict_to_insert))
         columns = ', '.join(dict_to_insert.keys())
@@ -116,14 +125,14 @@ class BMAdb(object):
                 placeholders))
         try:
             conn = MySQLdb.connect(**self.DB_INFO)
-            conn.select_db(self.DB_NAME)
-            cursor = conn.cursor()
-            cursor.execute(sql, dict_to_insert.values())
-            conn.commit()
+            with conn:
+                conn.select_db(self.DB_NAME)
+                cursor = conn.cursor()
+                cursor.execute(sql, dict_to_insert.values())
+                conn.commit()
         except MySQLdb.Error, e:
             # 如果出错就输出错误消息
             print('MySQL Error [%d]: %s' %(e.args[0], e.args[1]))
         finally:
             cursor.close()
             conn.close()
- 
