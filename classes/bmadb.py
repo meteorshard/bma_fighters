@@ -108,6 +108,7 @@ class BMAdb(object):
         placeholders = ", ".join(['%s']*len(dict_log))
         columns = ', '.join(dict_log.keys())
         sql = ('INSERT INTO %s (%s) VALUES (%s)'
-                %self.TABLE_PAY_LOG,
-                %columns,
-                %placeholders)
+                %(self.TABLE_PAY_LOG,
+                columns,
+                placeholders))
+
