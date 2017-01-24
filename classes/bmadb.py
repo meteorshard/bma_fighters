@@ -13,6 +13,8 @@ class BMAdb(object):
     }
 
     DB_NAME = 'bmagym'
+    TABLE_PAY_LOG = 'pay_log'
+    TABLE_MEMBER = 'member'
 
     def __init__(self):
         """ 初始化数据库
@@ -58,7 +60,7 @@ class BMAdb(object):
 
                 # 如果没有pay_log表就新建一个
                 sql = (
-                    'CREATE TABLE IF NOT EXISTS pay_log('
+                    'CREATE TABLE IF NOT EXISTS %s('
                         'l_id int NOT NULL AUTO_INCREMENT,'
                         'u_id int NOT NULL,'
                         'pay_time datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,'
@@ -68,13 +70,13 @@ class BMAdb(object):
                         'recommended_by int,'
                         'comment text,'
                         'PRIMARY KEY(l_id)'
-                    ')'
+                    ')' %self.TABLE_PAY_LOG
                 )
                 cursor.execute(sql)
 
                 # 如果没有members表就建一个
                 sql = (
-                    'CREATE TABLE IF NOT EXISTS members('
+                    'CREATE TABLE IF NOT EXISTS %s('
                         'u_id int NOT NULL AUTO_INCREMENT,'
                         'name varchar(30) NOT NULL,'
                         'wechat_id varchar(30) NOT NULL,'
@@ -88,7 +90,7 @@ class BMAdb(object):
                         'count_left smallint,'
                         'comment text,'
                         'PRIMARY KEY(u_id)'
-                    ')'
+                    ')' %self.TABLE_MEMBER
                 )
                 cursor.execute(sql)
 
@@ -102,4 +104,10 @@ class BMAdb(object):
             cursor.close()
             conn.close()
 
-    def insert_log(self, )
+    def insert_log(self, dict_log):
+        placeholders = ", ".join(['%s']*len(dict_log))
+        columns = ', '.join(dict_log.keys())
+        sql = ('INSERT INTO %s (%s) VALUES (%s)'
+                %self.TABLE_PAY_LOG,
+                %columns,
+                %placeholders)
