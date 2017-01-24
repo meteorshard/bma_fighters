@@ -104,19 +104,22 @@ class BMAdb(object):
             cursor.close()
             conn.close()
 
-    def insert_log(self, dict_log):
-        placeholders = ", ".join(['%s']*len(dict_log))
-        columns = ', '.join(dict_log.keys())
+    def insert_dict(self, table_name, dict_to_insert):
+        # 插入的dict里有几项就生成几个“%s, ”
+        placeholders = ', '.join(['%s']*len(dict_to_insert))
+        columns = ', '.join(dict_to_insert.keys())
 
         # INSERT INTO pay_log (l_id, u_id, ...) VALUES (%s, %s, ...)
         sql = ('INSERT INTO %s (%s) VALUES (%s)'
-                %(self.TABLE_PAY_LOG,
+                %(table_name,
                 columns,
                 placeholders))
         try:
             conn = MySQLdb.connect(**self.DB_INFO)
+            conn.select_db(self.DB_NAME)
             cursor = conn.cursor()
-            cursor.execute(sql, dict_log.values())
+            cursor.execute(sql, dict_to_insert.values())
+            conn.commit()
         except MySQLdb.Error, e:
             # 如果出错就输出错误消息
             print('MySQL Error [%d]: %s' %(e.args[0], e.args[1]))
