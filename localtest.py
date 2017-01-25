@@ -6,7 +6,7 @@ import MySQLdb
 db_info = {
     'host': '127.0.0.1',
     'user': 'root',
-    'passwd': 'mataleao0',
+    'passwd': 'bolomma0',
     'charset': 'utf8'
 }
 

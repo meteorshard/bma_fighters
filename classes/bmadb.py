@@ -54,8 +54,8 @@ class BMAdb(object):
                 cursor = conn.cursor()
 
                 # 如果没有数据库就新建一个
-                sql = 'CREATE DATABASE IF NOT EXISTS %s'
-                cursor.execute(sql, (self.DB_NAME,))
+                sql = 'CREATE DATABASE IF NOT EXISTS %s' %self.DB_NAME
+                cursor.execute(sql)
                 conn.select_db(self.DB_NAME)
 
                 # 如果没有pay_log表就新建一个

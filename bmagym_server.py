@@ -5,7 +5,6 @@ from classes.bmadb import BMAdb
 
 if __name__ == '__main__':
     dictinsert = {
-            'l_id': 1231413,
             'u_id': 546456,
             'buy_duration': 30,
             'buy_count': 10,
