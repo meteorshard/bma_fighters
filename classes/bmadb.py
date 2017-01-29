@@ -104,6 +104,24 @@ class BMAdb(object):
             cursor.close()
             conn.close()
 
+    def _execsql(self, sql, **kwargs):
+        try:
+            conn = MySQLdb.connect(cursorclass=MySQLdb.cursors.DictCursor,
+                    **self.DB_INFO)
+            with conn:
+                conn.select_db(self.DB_NAME)
+                cursor = conn.cursor()
+                cursor.execute(sql, kwargs) 
+                result = cursor.fetchall()
+                conn.commit()
+                return result
+        except MySQLdb.Error, e:
+            # 如果出错就输出错误消息
+            print('MySQL Error [%d]: %s' %(e.args[0], e.args[1]))
+        finally:
+            cursor.close()
+            conn.close()
+
     def insert_dict(self, table_name, dict_to_insert):
         """ 向数据库插入字典格式的数据
         根据字典格式数据生成对应的SQL
@@ -123,12 +141,20 @@ class BMAdb(object):
                 %(table_name,
                 columns,
                 placeholders))
+
+        li = dict_to_insert.values()
+        print(li)
+
+        self._execsql(sql, li)
+
+    def search_member(self, column_name, string_to_search):
+        sql = 'SELECT * FROM %s WHERE %s=%s' %self.TABLE_MEMBER
         try:
             conn = MySQLdb.connect(**self.DB_INFO)
             with conn:
                 conn.select_db(self.DB_NAME)
                 cursor = conn.cursor()
-                cursor.execute(sql, dict_to_insert.values())
+                cursor.execute(sql, (column_name, string_to_search))
                 conn.commit()
         except MySQLdb.Error, e:
             # 如果出错就输出错误消息
