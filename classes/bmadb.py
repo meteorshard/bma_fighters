@@ -80,7 +80,7 @@ class BMAdb(object):
                         'u_id int NOT NULL AUTO_INCREMENT,'
                         'name varchar(30) NOT NULL,'
                         'wechat_id varchar(30),'
-                        'sex tinyint(1) NOT NULL,'
+                        'sex tinyint(1),'
                         'tel varchar(13),'
                         'paper_type varchar(10),'
                         'paper_number varchar(30),'
@@ -111,8 +111,10 @@ class BMAdb(object):
             *arg: list格式的参数
 
         Returns:
-            result: 如果是查询语句就返回查询结果的字典
+            result: 如果是查询语句就返回查询结果的字典，
         """
+
+        result = {}
 
         try:
             conn = MySQLdb.connect(cursorclass=MySQLdb.cursors.DictCursor,
@@ -123,13 +125,14 @@ class BMAdb(object):
                 cursor.execute(sql, arg) 
                 result = cursor.fetchall()
                 conn.commit()
-                return result
         except MySQLdb.Error, e:
             # 如果出错就输出错误消息
             print('MySQL Error [%d]: %s' %(e.args[0], e.args[1]))
         finally:
             cursor.close()
             conn.close()
+
+        return result
 
     def insert_dict(self, table_name, dict_to_insert):
         """ 向数据库插入字典格式的数据
@@ -151,23 +154,9 @@ class BMAdb(object):
                 columns,
                 placeholders))
 
-        li = dict_to_insert.values()
-        print(li)
-
-        self._execsql(sql, *li)
+        self._execsql(sql, *dict_to_insert.values())
 
     def search_member(self, column_name, string_to_search):
         sql = 'SELECT * FROM %s WHERE %s=%s' %self.TABLE_MEMBER
-        try:
-            conn = MySQLdb.connect(**self.DB_INFO)
-            with conn:
-                conn.select_db(self.DB_NAME)
-                cursor = conn.cursor()
-                cursor.execute(sql, (column_name, string_to_search))
-                conn.commit()
-        except MySQLdb.Error, e:
-            # 如果出错就输出错误消息
-            print('MySQL Error [%d]: %s' %(e.args[0], e.args[1]))
-        finally:
-            cursor.close()
-            conn.close()
+        a = self._execsql(sql, *[column_name, string_to_search])
+        print(a)

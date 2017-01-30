@@ -10,5 +10,10 @@ if __name__ == '__main__':
             'buy_count': 10,
             'comment': 'test log'
             }
+    dict_testmember = {
+            'name': 'dashabi'
+            }
     main_db = BMAdb()
-    main_db.insert_dict('pay_log', dictinsert)
+
+    # main_db.insert_dict('pay_log', dictinsert)
+    main_db.insert_dict('member', dict_testmember)
