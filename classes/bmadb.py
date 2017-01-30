@@ -104,14 +104,23 @@ class BMAdb(object):
             cursor.close()
             conn.close()
 
-    def _execsql(self, sql, **kwargs):
+    def _execsql(self, sql, *arg):
+        """ 执行SQL语句
+        Args:
+            sql: 语句
+            *arg: list格式的参数
+
+        Returns:
+            result: 如果是查询语句就返回查询结果的字典
+        """
+
         try:
             conn = MySQLdb.connect(cursorclass=MySQLdb.cursors.DictCursor,
                     **self.DB_INFO)
             with conn:
                 conn.select_db(self.DB_NAME)
                 cursor = conn.cursor()
-                cursor.execute(sql, kwargs) 
+                cursor.execute(sql, arg) 
                 result = cursor.fetchall()
                 conn.commit()
                 return result
@@ -145,7 +154,7 @@ class BMAdb(object):
         li = dict_to_insert.values()
         print(li)
 
-        self._execsql(sql, li)
+        self._execsql(sql, *li)
 
     def search_member(self, column_name, string_to_search):
         sql = 'SELECT * FROM %s WHERE %s=%s' %self.TABLE_MEMBER
