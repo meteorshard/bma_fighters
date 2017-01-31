@@ -157,6 +157,11 @@ class BMAdb(object):
         self._execsql(sql, *dict_to_insert.values())
 
     def search_member(self, column_name, string_to_search):
-        sql = 'SELECT * FROM %s WHERE %s=%s' %self.TABLE_MEMBER
+        sql = 'SELECT * FROM %s WHERE %s=%s' %(self.TABLE_MEMBER, '%s', '%s')
         a = self._execsql(sql, *[column_name, string_to_search])
         print(a)
+
+    def search_member_where(self, where):
+        sql = 'SELECT * FROM %s WHERE %s' %(self.TABLE_MEMBER, where)
+        a = self._execsql(sql)
+        print(repr(a))
