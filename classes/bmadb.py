@@ -35,7 +35,7 @@ class BMAdb(object):
                 u_id: 用户id
                 name: 名字
                 wechat_id: 微信id
-                sex: 性别 0-female 1-male
+                sex: 性别 0-Unknown 1-male 2-female
                 tel: 电话
                 paper_type: 证件类型
                 paper_number: 证件号码
@@ -134,7 +134,7 @@ class BMAdb(object):
 
         return result
 
-    def insert_dict(self, table_name, dict_to_insert):
+    def _insert_dict(self, table_name, dict_to_insert):
         """ 向数据库插入字典格式的数据
         根据字典格式数据生成对应的SQL
         需注意保持格式一致
@@ -155,6 +155,15 @@ class BMAdb(object):
                 placeholders))
 
         self._execsql(sql, *dict_to_insert.values())
+
+    def insert_member(self, member):
+        """ 向member表插入数据
+
+        Args:
+            member: BMAMember类型的对象
+        
+        """
+        self._insert_dict(self.TABLE_MEMBER, member.serialize())
 
     def search_member(self, column_name, string_to_search):
         sql = 'SELECT * FROM %s WHERE %s=%s' %(self.TABLE_MEMBER, '%s', '%s')
