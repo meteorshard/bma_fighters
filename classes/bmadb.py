@@ -165,12 +165,15 @@ class BMAdb(object):
         """
         self._insert_dict(self.TABLE_MEMBER, member.serialize())
 
-    def search_member(self, column_name, string_to_search):
-        sql = 'SELECT * FROM %s WHERE %s=%s' %(self.TABLE_MEMBER, '%s', '%s')
-        a = self._execsql(sql, *[column_name, string_to_search])
-        print(a)
+    def _search(self, table_name, **kwargs):
+        # SELECT * FROM member WHERE u_id = %s AND sex = %s AND ...
+        conditions = []
+        for k in kwargs.keys():
+            conditions.append('%s = %s' %(k, '%s'))
+        where = ' AND '.join(conditions)
+        sql = 'SELECT * FROM %s WHERE %s' %(table_name, where)
 
-    def search_member_where(self, where):
-        sql = 'SELECT * FROM %s WHERE %s' %(self.TABLE_MEMBER, where)
-        a = self._execsql(sql)
-        print(repr(a))
+        return self._execsql(sql, *kwargs.values())
+
+    def search_member(self, member):
+        return self._search(self.TABLE_MEMBER, **member.serialize())

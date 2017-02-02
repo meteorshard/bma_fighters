@@ -9,7 +9,7 @@ def main():
     member_test = BMAMember(name='super dashabi', wechat_id='hahahawechat',
             sex=1)
     db_test = BMAdb()
-    db_test.insert_member(member_test)
+    print(db_test.search_member(member_test))
 
 if __name__ == '__main__':
     main()
