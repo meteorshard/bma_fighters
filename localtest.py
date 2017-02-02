@@ -6,11 +6,9 @@ from classes.bmamember import BMAMember
 from classes.bmadb import BMAdb
 
 def main():
-    member_test = BMAMember(u_id=2)
+    member_test = BMAMember(sex=1, tel=18601127903, comment='大傻逼')
     db_test = BMAdb()
-    # print(repr(db_test.search_member(member_test)))
-    for each_member in db_test.search_member(member_test):
-        print(repr(each_member.serialize()))
+    db_test.update_member(2, member_test)
 
 if __name__ == '__main__':
     main()

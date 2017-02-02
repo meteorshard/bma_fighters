@@ -54,7 +54,7 @@ class BMAMember(object):
 
         Args:
             **kwargs: 输入的属性，按照
-            字段名=值
+            字段名=值 或者 **dict
             的方式输入
         """
 

@@ -177,8 +177,8 @@ class BMAdb(object):
 
         Returns:
             把查找到的记录以字典形式返回
-
         """
+
         # SELECT * FROM member WHERE u_id = %s AND sex = %s AND ...
         conditions = []
         for k in kwargs.keys():
@@ -210,3 +210,36 @@ class BMAdb(object):
             members.append(member)
 
         return members
+
+    def update_member(self, u_id, member):
+        """ 更新数据库里的member记录
+        创建一个BMAMember对象，里面装上需要更新的数据
+        把这些数据更新到u_id对应的记录里
+
+        Args:
+            u_id: 目标记录的u_id
+            member: BMAMember对象，属性是需要更新的新数据
+
+        SQL:
+            UPDATE member SET 
+              name = 'new name', 
+              email = 'new@email.com',
+              ...
+            WHERE
+              u_id = 123456
+        """
+
+        dict_member = member.serialize()
+
+        sets = []
+        for k in dict_member.keys():
+            sets.append('%s = %s' % (k, '%s'))
+        update = ', '.join(sets)
+        sql = 'UPDATE %s SET %s WHERE %s' % (self.TABLE_MEMBER, update, '%s')
+        print(sql)
+        setslist = dict_member.values()
+        setslist.append('u_id = %s' % u_id)
+        
+        print(setslist)
+
+        self._execsql(sql, setslist)
