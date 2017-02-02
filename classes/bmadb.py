@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import MySQLdb
+from bmamember import BMAMember
 
 class BMAdb(object):
 
@@ -111,7 +112,7 @@ class BMAdb(object):
             *arg: list格式的参数
 
         Returns:
-            result: 如果是查询语句就返回查询结果的字典，
+            result: 如果是查询语句就返回查询结果的字典
         """
 
         result = {}
@@ -166,6 +167,18 @@ class BMAdb(object):
         self._insert_dict(self.TABLE_MEMBER, member.serialize())
 
     def _search(self, table_name, **kwargs):
+        """ 查找数据库
+        返回一个字典类型结果
+        目前还只能用=查找咯
+
+        Args:
+            table_name: 目标表名
+            **kwargs: 查找条件
+
+        Returns:
+            把查找到的记录以字典形式返回
+
+        """
         # SELECT * FROM member WHERE u_id = %s AND sex = %s AND ...
         conditions = []
         for k in kwargs.keys():
@@ -176,4 +189,24 @@ class BMAdb(object):
         return self._execsql(sql, *kwargs.values())
 
     def search_member(self, member):
-        return self._search(self.TABLE_MEMBER, **member.serialize())
+        """ 在数据库搜索符合条件的member记录
+        如果找到了就把记录转换成一个BMAMember对象
+        合并为list返回
+
+        Args:
+            member: BMAMember对象的tuple，有效属性就是搜索条件
+
+        Returns:
+            搜索结果，一个或多个BMAMember对象的list
+        """
+
+        # 搜索结果是一个tuple，里面是一个或多个dict
+        dict_results = self._search(self.TABLE_MEMBER, **member.serialize())
+        members = []
+
+        for each_result in dict_results:
+            member = BMAMember()
+            member.deserialize(**each_result)
+            members.append(member)
+
+        return members
