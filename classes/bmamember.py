@@ -6,27 +6,32 @@ import datetime
 class BMAMember(object):
     def __init__(self,
             u_id=0,
-            name='',
+            nickname='',
+            realname='',
             wechat_id='',
             sex=0,
             tel=0,
             paper_type='',
             paper_number='',
             email='',
+            birthday=datetime.date(1900, 1, 1),
+            duration_left=0,
+            count_left=0,
             comment=''
             ):
-        self.u_id = u_id
-        self.name = name 
-        self.wechat_id = wechat_id 
-        self.sex = sex
-        self.tel = tel
-        self.paper_type = paper_type
-        self.paper_number = paper_number
-        self.email = email
-        self.birthday = datetime.date(1900, 1, 1)
-        self.duration_left = 0
-        self.count_left = 0
-        self.comment = comment
+            self.u_id = u_id
+            self.nickname = nickname 
+            self.realname = realname
+            self.wechat_id = wechat_id 
+            self.sex = sex
+            self.tel = tel
+            self.paper_type = paper_type
+            self.paper_number = paper_number
+            self.email = email
+            self.birthday = birthday 
+            self.duration_left = duration_left
+            self.count_left = count_left
+            self.comment = comment
 
     def serialize(self):
         """ 序列化Member类

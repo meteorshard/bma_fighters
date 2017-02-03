@@ -79,7 +79,8 @@ class BMAdb(object):
                 sql = (
                     'CREATE TABLE IF NOT EXISTS %s('
                         'u_id int NOT NULL AUTO_INCREMENT,'
-                        'name varchar(30) NOT NULL,'
+                        'nickname varchar(30),'
+                        'realname varchar(30),'
                         'wechat_id varchar(30),'
                         'sex tinyint(1),'
                         'tel varchar(13),'
@@ -238,7 +239,5 @@ class BMAdb(object):
         update = ', '.join(sets)
         sql = 'UPDATE %s SET %s WHERE u_id = %s' % (self.TABLE_MEMBER, update,
                 u_id)
-        print(sql)
-        print(dict_member.values())
 
         self._execsql(sql)
