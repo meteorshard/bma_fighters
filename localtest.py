@@ -6,7 +6,7 @@ from classes.bmamember import BMAMember
 from classes.bmadb import BMAdb
 
 def main():
-    member_test = BMAMember(sex=1, tel=18601127903, comment='大傻逼')
+    member_test = BMAMember(sex=1, tel=18601127903, comment='super idiot')
     db_test = BMAdb()
     db_test.update_member(2, member_test)
 

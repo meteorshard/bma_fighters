@@ -232,14 +232,13 @@ class BMAdb(object):
         dict_member = member.serialize()
 
         sets = []
-        for k in dict_member.keys():
-            sets.append('%s = %s' % (k, '%s'))
-        update = ', '.join(sets)
-        sql = 'UPDATE %s SET %s WHERE %s' % (self.TABLE_MEMBER, update, '%s')
-        print(sql)
-        setslist = dict_member.values()
-        setslist.append('u_id = %s' % u_id)
-        
-        print(setslist)
+        for k, v in dict_member.iteritems():
+            sets.append('%s = \'%s\'' % (k, v)) 
 
-        self._execsql(sql, setslist)
+        update = ', '.join(sets)
+        sql = 'UPDATE %s SET %s WHERE u_id = %s' % (self.TABLE_MEMBER, update,
+                u_id)
+        print(sql)
+        print(dict_member.values())
+
+        self._execsql(sql)
