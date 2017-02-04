@@ -34,7 +34,8 @@ class BMAdb(object):
         3. 建立数据表members，用于存储会员信息
             表结构说明：
                 u_id: 用户id
-                name: 名字
+                nickname: 微信名字
+                realname: 真实姓名
                 wechat_id: 微信id
                 sex: 性别 0-Unknown 1-male 2-female
                 tel: 电话

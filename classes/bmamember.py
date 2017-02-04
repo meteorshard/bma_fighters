@@ -45,12 +45,14 @@ class BMAMember(object):
         for k, v in self.__dict__.iteritems():
             # print('Key: %s, Value: %s' %(k, v))
 
-            if (v != '' and
-                v != 0 and
+            if (v and 
                 v != datetime.date(1900, 1, 1)):
-                serialized_dict[k] = v
+                print(v)
+                if k == 'birthday':
+                    serialized_dict[k] = v.strftime('%Y-%m-%d')
+                else:
+                    serialized_dict[k] = v
 
-            # print(repr(serialized_dict))
         return serialized_dict
 
     def deserialize(self, **kwargs):
