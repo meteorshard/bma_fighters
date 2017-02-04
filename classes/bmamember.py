@@ -47,8 +47,7 @@ class BMAMember(object):
 
             if (v and 
                 v != datetime.date(1900, 1, 1)):
-                print(v)
-                if k == 'birthday':
+                if k == 'birthday' and isinstance(v, datetime.date):
                     serialized_dict[k] = v.strftime('%Y-%m-%d')
                 else:
                     serialized_dict[k] = v

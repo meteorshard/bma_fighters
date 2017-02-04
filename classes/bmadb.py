@@ -125,6 +125,7 @@ class BMAdb(object):
             with conn:
                 conn.select_db(self.DB_NAME)
                 cursor = conn.cursor()
+                # print('SQL: %s\nArgs: %s' % (sql, arg))
                 cursor.execute(sql, arg) 
                 result = cursor.fetchall()
                 conn.commit()
@@ -166,6 +167,10 @@ class BMAdb(object):
             member: BMAMember类型的对象
         
         """
+
+        if member.__dict__.has_key('u_id'):
+            member.u_id = 0
+
         self._insert_dict(self.TABLE_MEMBER, member.serialize())
 
     def _search(self, table_name, **kwargs):
