@@ -2,42 +2,28 @@
 # -*- coding: utf-8 -*-
 
 import MySQLdb
+import datetime
+from classes.bmamember import BMAMember
+from classes.bmadb import BMAdb
 
-db_info = {
-    'host': '127.0.0.1',
-    'user': 'root',
-    'passwd': 'mataleao0',
-    'charset': 'utf8'
-}
+def test_update():
+    member_test = BMAMember(nickname='杜姆斯呆', realname='周潇', sex=2, tel=18601127903, comment='大傻逼')
+    member_test.birthday = datetime.date(1985, 7, 13) 
+    db_test = BMAdb()
+    db_test.update_member(2, member_test)
 
-def init_db():
-    try:
-        conn = MySQLdb.connect(**db_info)
-        with conn:
-            cur = conn.cursor()
-            db_name = 'bmagym'
-            sql = 'CREATE DATABASE IF NOT EXISTS %s' %db_name
-            cur.execute(sql)
-            conn.select_db(db_name)
-            sql = ('CREATE TABLE IF NOT EXISTS pay_log('
-                    'l_id int NOT NULL AUTO_INCREMENT,'
-                    'u_id int NOT NULL,'
-                    'pay_time datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,'
-                    'pay_amount mediumint DEFAULT 0,'
-                    'buy_duration smallint DEFAULT 0,'
-                    'buy_count smallint DEFAULT 0,'
-                    'event_id int,'
-                    'recommended_by int,'
-                    'comment text(200),'
-                    'PRIMARY KEY(l_id)'
-                   ')')
-            cur.execute(sql)
-            conn.commit()
-    except MySQLdb.Error, e:
-        print('MySQL Error [%d]: %s' %(e.args[0], e.args[1]))
-    finally:
-        cur.close()
-        conn.close()
+def test_insert():
+    members=[]
+    for i in range(10):
+        member_test_insert = BMAMember()
+        members.append(member_test_insert)
+    db_test = BMAdb()
+    for member in members:
+        db_test.insert_member(member)
+
+def main():
+    # test_insert()
+    test_update()
 
 if __name__ == '__main__':
-    init_db()
+    main()
