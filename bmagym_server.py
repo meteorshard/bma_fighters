@@ -58,7 +58,7 @@ def member():
     return 'success'
 
 def main():
-    bmagym_server.run(host='0.0.0.0', debug=True)
+    bmagym_server.run(host='127.0.0.1')
 
 if __name__ == '__main__':
     main()
