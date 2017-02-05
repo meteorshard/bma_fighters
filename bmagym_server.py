@@ -37,25 +37,28 @@ def member():
     content = request.get_json()
     print('json is: %s' % content)
 
-    db_member = BMAdb()
+    if content:
+        db_member = BMAdb()
 
-    print(repr(content))
+        print(repr(content))
 
-    for each_dict in content:
-        each_member = BMAMember()
-        each_member.deserialize(**each_dict)
+        for each_dict in content:
+            each_member = BMAMember()
+            each_member.deserialize(**each_dict)
 
-        each_member_search = BMAMember(u_id=each_member.u_id)
-        search_result = db_member.search_member(each_member_search)
+            each_member_search = BMAMember(u_id=each_member.u_id)
+            search_result = db_member.search_member(each_member_search)
 
-        if search_result: 
-            print('Updating')
-            db_member.update_member(search_result[0].u_id, each_member)
-        else:
-            print('Inserting')
-            db_member.insert_member(each_member)
-    
-    return 'success'
+            if search_result: 
+                print('Updating')
+                db_member.update_member(search_result[0].u_id, each_member)
+            else:
+                print('Inserting')
+                db_member.insert_member(each_member)
+        
+        return 'success'
+    else:
+        return 'post failed: not json data'
 
 def main():
     bmagym_server.run(host='127.0.0.1')
