@@ -40,9 +40,16 @@ def member():
     if content:
         db_member = BMAdb()
 
-        print(repr(content))
+        content_list = []
 
-        for each_dict in content:
+        if isinstance(content, dict):
+            content_list = content_list.append(content)
+        elif isinstance(content, list):
+            content_list = content
+        else:
+            return 'post failed: unknown data type'
+
+        for each_dict in content_list:
             each_member = BMAMember()
             each_member.deserialize(**each_dict)
 
