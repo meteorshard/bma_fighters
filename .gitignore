@@ -2,3 +2,6 @@ venv/
 
 *.pyc
 *.swp
+*.log
+supervisor.sh
+log

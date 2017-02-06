@@ -35,7 +35,6 @@ def member():
     """
 
     content = request.get_json()
-    print('json is: %s' % content)
 
     if content:
         db_member = BMAdb()
@@ -43,7 +42,7 @@ def member():
         content_list = []
 
         if isinstance(content, dict):
-            content_list = content_list.append(content)
+            content_list.append(content)
         elif isinstance(content, list):
             content_list = content
         else:
