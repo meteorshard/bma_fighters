@@ -4,7 +4,10 @@
 from . import bmagym_server
 
 import json
-from flask import request
+from flask import request, Response
+import qrcode
+import datetime
+import hashlib
 
 from classes.bmadb import BMAdb
 from classes.bmamember import BMAMember
@@ -66,4 +69,23 @@ def member():
     else:
         return 'post failed: not json data'
 
+@bmagym_server.route('/api/qrcode/<u_id>', methods=['GET'])
+def get_qrcode(u_id):
+    """ 生成与时间和用户ID相关的二维码
+    """
+
+    extra_string = 'bMafIGhtErreAdYtOfIghT'
+    datetime_string = datetime.datetime.now().strftime(
+        '%Y-%m-%d %H:%M') 
+
+    # 把用户id、时间和特定字符串组合生成MD5并转换成字符串
+    string_convert = hashlib.md5(u_id + datetime_string + extra_string).hexdigest()
+    qr_image = qrcode.make(string_convert)
+
+    image_file_location = 'tmp/qrcode.jpg'
+    qr_image.save(image_file_location)
+    image = file(image_file_location)
+
+    resp = Response(image, mimetype="image/jpeg")
+    return resp
 
