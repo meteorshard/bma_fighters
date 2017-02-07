@@ -69,8 +69,8 @@ def member():
     else:
         return 'post failed: not json data'
 
-@bmagym_server.route('/api/qrcode/<u_id>', methods=['GET'])
-def get_qrcode(u_id):
+@bmagym_server.route('/api/qrcode/checkin/', methods=['GET'])
+def get_qrcode():
     """ 生成与时间和用户ID相关的二维码
     """
 
@@ -78,9 +78,12 @@ def get_qrcode(u_id):
     datetime_string = datetime.datetime.now().strftime(
         '%Y-%m-%d %H:%M') 
 
-    # 把用户id、时间和特定字符串组合生成MD5并转换成字符串
-    string_convert = hashlib.md5(u_id + datetime_string + extra_string).hexdigest()
-    qr_image = qrcode.make(string_convert)
+    # 把时间和特定字符串组合生成MD5并转换成字符串
+    string_fingerprint = hashlib.md5(datetime_string + extra_string).hexdigest()
+    qr_string = ('https://boluogedou.com/api/qrcode/scan?u_id=%s&fp=%s' %
+        (request.args['u_id'], string_fingerprint))
+    # qr_image = qrcode.make(string_convert)
+    qr_image = qrcode.make(qr_string)
 
     image_file_location = 'tmp/qrcode.jpg'
     qr_image.save(image_file_location)
