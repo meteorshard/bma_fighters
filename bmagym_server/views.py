@@ -35,7 +35,6 @@ def member():
     """
 
     content = request.get_json()
-    print('json is: %s' % content)
 
     if content:
         db_member = BMAdb()

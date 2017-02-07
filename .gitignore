@@ -3,3 +3,6 @@ venv/
 *.pyc
 *.swp
 localtest.py
+*.log
+supervisor.sh
+log
