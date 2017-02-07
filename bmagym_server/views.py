@@ -1,13 +1,13 @@
 #!usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request, jsonify
+from . import bmagym_server
+
 import json
+from flask import request
 
 from classes.bmadb import BMAdb
 from classes.bmamember import BMAMember
-
-bmagym_server = Flask(__name__)
 
 @bmagym_server.route('/api/member/search', methods=['GET'])
 def search():
@@ -66,8 +66,4 @@ def member():
     else:
         return 'post failed: not json data'
 
-def main():
-    bmagym_server.run(host='127.0.0.1')
 
-if __name__ == '__main__':
-    main()
