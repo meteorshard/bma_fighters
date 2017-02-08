@@ -6,4 +6,4 @@ localtest.py
 *.log
 *.sh
 log
-deploy_config.py
+tmp
