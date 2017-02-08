@@ -5,12 +5,43 @@ from . import bmagym_server
 
 import json
 from flask import request, Response
+import requests
 import qrcode
 import datetime
 import hashlib
 
 from classes.bmadb import BMAdb
 from classes.bmamember import BMAMember
+
+@bmagym_server.route('/api/member/login', methods=['GET'])
+def login():
+    """ 用户登录
+    从客户端发过来微信code
+    拿code去微信服务器解密取得open_id
+    微信解密api：
+        https://api.weixin.qq.com/sns/jscode2session?
+            appid=APPID&
+            secret=SECRET&
+            js_code=JSCODE&
+            grant_type=authorization_code
+    
+    传入参数：
+        code
+    """
+
+    if request.args['code']:
+        app_id = 'wx602359e41eb3beb1'
+        secret = 'a47a48dd45ee9ee07cd8cd7cbdf7ef60'
+
+        s = requests.session()
+        decrypt_url = (
+            'https://api.weixin.qq.com/sns/jscode2session?'
+                'appid=%s&' % app_id
+                'secret=%s&' % secret
+                'js_code=%s&' % request.args['code']
+                'grant_type=authorization_code'
+        )
+        result = s.get(url)
 
 @bmagym_server.route('/api/member/search', methods=['GET'])
 def search():
