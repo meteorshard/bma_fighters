@@ -15,8 +15,9 @@ class BMAMember(object):
             paper_number='',
             email='',
             birthday=datetime.date(1900, 1, 1),
-            duration_left=0,
+            expire_date=datetime.date(1900, 1, 1),
             count_left=0,
+            consume_type=0,
             comment=''
             ):
             self.u_id = u_id
@@ -29,8 +30,9 @@ class BMAMember(object):
             self.paper_number = paper_number
             self.email = email
             self.birthday = birthday 
-            self.duration_left = duration_left
+            self.expire_date = expire_date
             self.count_left = count_left
+            self.consume_type = consume_type
             self.comment = comment
 
     def serialize(self):
@@ -47,7 +49,7 @@ class BMAMember(object):
 
             if (v and 
                 v != datetime.date(1900, 1, 1)):
-                if k == 'birthday' and isinstance(v, datetime.date):
+                if isinstance(v, datetime.date):
                     serialized_dict[k] = v.strftime('%Y-%m-%d')
                 else:
                     serialized_dict[k] = v

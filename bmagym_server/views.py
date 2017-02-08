@@ -59,10 +59,10 @@ def member():
             search_result = db_member.search_member(each_member_search)
 
             if search_result: 
-                print('Updating')
+                # print('Updating')
                 db_member.update_member(search_result[0].u_id, each_member)
             else:
-                print('Inserting')
+                # print('Inserting')
                 db_member.insert_member(each_member)
         
         return 'success'

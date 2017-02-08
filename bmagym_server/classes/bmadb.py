@@ -43,8 +43,9 @@ class BMAdb(object):
                 paper_number: 证件号码
                 email: 邮箱
                 birthday: 生日
-                duration left: 剩余时间
+                expire_date: 到期日
                 count left: 剩余次数
+                consume_type: 会员类型 0-非活跃 1-次卡 2-时间卡
                 comment: 备注
 
         4. 建立数据表events，用于存储活动信息
@@ -89,8 +90,9 @@ class BMAdb(object):
                         'paper_number varchar(30),'
                         'email varchar(30),'
                         'birthday date,'
-                        'duration_left smallint,'
+                        'expire_date date,'
                         'count_left smallint,'
+                        'cosume_type tinyint(1),'
                         'comment text,'
                         'PRIMARY KEY(u_id)'
                     ')' %self.TABLE_MEMBER
@@ -236,6 +238,7 @@ class BMAdb(object):
               u_id = 123456
         """
 
+        member.u_id = 0
         dict_member = member.serialize()
 
         sets = []
