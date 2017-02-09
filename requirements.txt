@@ -9,7 +9,9 @@ MySQL-python==1.2.5
 olefile==0.44
 packaging==16.8
 Pillow==4.0.0
+pycrypto==2.6.1
 pyparsing==2.1.10
 qrcode==5.3
+requests==2.13.0
 six==1.10.0
 Werkzeug==0.11.15

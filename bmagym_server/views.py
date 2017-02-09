@@ -12,6 +12,7 @@ import hashlib
 
 from classes.bmadb import BMAdb
 from classes.bmamember import BMAMember
+from classes.WXBizDataCrypt import WXBizDataCrypt
 
 @bmagym_server.route('/api/member/login', methods=['GET'])
 def login():
@@ -75,6 +76,19 @@ def login():
                 return json.dumps({'error': 0})
         return json.dumps({'error': 1})
     return json.dumps({'error': 2})
+
+@bmagym_server.route('/api/member/newlogin', methods=['POST'])
+def newlogin():
+    app_id = 'wx602359e41eb3beb1'
+    content = request.get_json()
+    if content and isinstance(content, dict):
+        if (content['session_key'] and
+            content['encrypted_data'] and
+            content['iv']):
+            pc = WXBizDataCrypt(app_id, content['session_key'])
+            decrypted_data = pc(content['encrypted_data'], content['iv'])
+            
+            return json.dumps(decrypted_data)
 
 @bmagym_server.route('/api/member/search', methods=['GET'])
 def search():
