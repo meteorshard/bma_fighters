@@ -4,7 +4,7 @@
 from . import bmagym_server
 
 import json
-from flask import request, Response
+from flask import request, Response, jsonify
 import requests
 import qrcode
 import datetime
@@ -24,9 +24,23 @@ def login():
             secret=SECRET&
             js_code=JSCODE&
             grant_type=authorization_code
+
+    取得open_id后到本地数据库查询是否存在
+    如果存在则取完整信息并返回
+    如果不存在则插入一条只有open_id和u_id的记录并返回
+    返回数据中不包括open_id
+
+    error code:
+        0: 从微信服务器换取open_id失败
+        1：微信服务器返回结果不是dict（一般不出现）
+        2：传入的参数里面没有code
     
     传入参数：
         code
+
+    returns:
+        如果获取成功，返回不带openid的用户信息
+        如果获取失败，返回错误
     """
 
     if request.args['code']:
@@ -36,12 +50,31 @@ def login():
         s = requests.session()
         decrypt_url = (
             'https://api.weixin.qq.com/sns/jscode2session?'
-                'appid=%s&' % app_id
-                'secret=%s&' % secret
-                'js_code=%s&' % request.args['code']
+                'appid=%s&' 
+                'secret=%s&'
+                'js_code=%s&'
                 'grant_type=authorization_code'
-        )
-        result = s.get(url)
+        ) % (app_id, secret, request.args['code'])
+        result = s.get(decrypt_url)
+
+        resultdict = json.loads(result.content)
+        if isinstance(resultdict, dict):
+            if resultdict.has_key('openid'):
+                member_login = BMAMember(wechat_id=resultdict['openid'])
+                db_login = BMAdb()
+
+                search_result = db_login.search_member(member_login)
+                if search_result == []:
+                    db_login.insert_member(member_login) 
+                elif search_result:
+                    member_login = search_result[0]
+                    member_login.wechat_id = ''
+
+                return json.dumps(member_login.serialize())
+            else:
+                return json.dumps({'error': 0})
+        return json.dumps({'error': 1})
+    return json.dumps({'error': 2})
 
 @bmagym_server.route('/api/member/search', methods=['GET'])
 def search():
