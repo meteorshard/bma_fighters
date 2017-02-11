@@ -53,7 +53,7 @@ def login():
             member_result = register_search_result[0]
             member_result.wechat_id = ''
             return json.dumps(member_result.serialize())
-        elif register_search_result == []:
+        else:
             db_register.insert_member(member_to_register)
             register_member(openid)
 
