@@ -74,11 +74,13 @@ def login():
         resultdict = json.loads(result.content)
         if isinstance(resultdict, dict):
             if resultdict.has_key('openid'):
-                register_member(resultdict['openid'])
+                return register_member(resultdict['openid'])
             else:
                 return json.dumps({'error': 0})
-        return json.dumps({'error': 1})
-    return json.dumps({'error': 2})
+        else:
+            return json.dumps({'error': 1})
+    else:
+        return json.dumps({'error': 2})
 
 @bmagym_server.route('/api/member/newlogin', methods=['POST'])
 def newlogin():
