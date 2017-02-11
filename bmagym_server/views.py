@@ -44,6 +44,19 @@ def login():
         如果获取失败，返回错误
     """
 
+    def register_member(openid):
+        member_to_register = BMAMember(wechat_id=openid)
+        db_register = BMAdb()
+        register_search_result = db_register.search_member(member_to_register)
+
+        if register_search_result:
+            member_result = register_search_result[0]
+            member_result.wechat_id = ''
+            return json.dumps(member_result.serialize())
+        elif register_search_result == []:
+            db_register.insert_member(member_to_register)
+            register_member(openid)
+
     if request.args['code']:
         app_id = 'wx602359e41eb3beb1'
         secret = 'a47a48dd45ee9ee07cd8cd7cbdf7ef60'
@@ -61,17 +74,7 @@ def login():
         resultdict = json.loads(result.content)
         if isinstance(resultdict, dict):
             if resultdict.has_key('openid'):
-                member_login = BMAMember(wechat_id=resultdict['openid'])
-                db_login = BMAdb()
-
-                search_result = db_login.search_member(member_login)
-                if search_result == []:
-                    db_login.insert_member(member_login) 
-                elif search_result:
-                    member_login = search_result[0]
-                    member_login.wechat_id = ''
-
-                return json.dumps(member_login.serialize())
+                register_member(resultdict['openid'])
             else:
                 return json.dumps({'error': 0})
         return json.dumps({'error': 1})
@@ -79,6 +82,13 @@ def login():
 
 @bmagym_server.route('/api/member/newlogin', methods=['POST'])
 def newlogin():
+    """ 微信的解密接口 - 未完成
+    未完成
+    未完成
+    未完成
+
+    """
+
     app_id = 'wx602359e41eb3beb1'
     content = request.get_json()
     if content and isinstance(content, dict):
