@@ -55,7 +55,11 @@ def login():
             return json.dumps(member_result.serialize())
         else:
             db_register.insert_member(member_to_register)
-            register_member(openid)
+            member_result = db_register.search_member(member_to_register)
+            if member_result:
+                return json.dumps(member_result[0].serialize())
+            else:
+                return json.dumps({'error': 3})
 
     if request.args['code']:
         app_id = 'wx602359e41eb3beb1'
