@@ -119,6 +119,7 @@ def search():
     result_members = db_search.search_member(member_to_search)
     result_list = []
     for each_member in result_members:
+        each_member.wechat_id = ''
         result_list.append(each_member.serialize())
 
     return json.dumps(result_list)

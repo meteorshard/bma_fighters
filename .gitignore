@@ -7,3 +7,4 @@ localtest.py
 *.sh
 log
 tmp
+tmp/*
